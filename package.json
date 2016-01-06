@@ -6,27 +6,31 @@
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
     "tsc:w": "./node_modules/.bin/tsc -w",
-    "build:html": "./node_modules/.bin/copyfiles -u 1 src/**/*.html app",
+    "build:html": "./node_modules/.bin/copyfiles -u 1 src/**/*.html src/**/*.css app",
+    "build:html:w": "./node_modules/.bin/watch-run -i -p \"src/**/*.html,src/**/*.css\" npm run build:html",
     "build": "./node_modules/.bin/concurrent \"npm run build:html\" \"npm run tsc\"",
-    "build:w": "./node_modules/.bin/concurrent \"npm run build:html\" \"npm run tsc -w\"",
+    "build:w": "./node_modules/.bin/concurrent \"npm run build:html:w\" \"npm run tsc:w\"",
     "serve": "./node_modules/.bin/lite-server --baseDir ./ --baseDir app",
-    "start": "./node_modules/.bin/concurrent \"npm run build-w\" \"npm run serve\""
+    "start": "./node_modules/.bin/concurrent \"npm run build:w\" \"npm run serve\""
   },
   "author": "Christian Steinmann",
   "license": "ISC",
   "dependencies": {
     "angular2": "^2.0.0-beta.0",
+    "bootstrap": "^3.3.6",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.34.1",
-    "reflect-metadata": "^0.1.2",
+    "jquery": "^2.1.4",
+    "reflect-metadata": "^0.1.3",
     "rxjs": "^5.0.0-beta.0",
-    "systemjs": "^0.19.10",
+    "systemjs": "^0.19.11",
     "zone.js": "^0.5.10"
   },
   "devDependencies": {
     "concurrently": "^1.0.0",
     "copyfiles": "^0.2.1",
     "lite-server": "^1.3.2",
-    "typescript": "^1.7.5"
+    "typescript": "^1.7.5",
+    "watch-run": "^1.2.4"
   }
 }
