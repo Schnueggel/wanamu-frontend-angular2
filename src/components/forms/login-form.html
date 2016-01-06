@@ -1,11 +1,11 @@
-<form>
+<form (ngSubmit)="onSubmit()" #loginForm="ngForm">
     <div class="form-group">
         <label for="username">Username/Email</label>
-        <input type="text" class="form-control" id="username">
+        <input type="text" class="form-control" id="username" [(ngModel)]="model.username" [ngFormControl]="usernameControl" #username="ngForm" (ngModelChange)="onChange()">
     </div>
     <div class="form-group">
-        <label for="password">Alter Ego</label>
-        <input type="password" class="form-control" id="password">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" [(ngModel)]="model.password" [ngFormControl]="passwordControl" ngControl="password" #password="ngForm" (ngModelChange)="onChange()">
     </div>
-    <button type="submit" class="btn btn-default">Login</button>
+    <button type="submit" class="btn btn-default" [disabled]="!loginForm.form.valid">Login</button>
 </form>

@@ -9,8 +9,15 @@
     "removeComments": false,
     "noImplicitAny": false,
     "outDir": "app",
+    "noLib": true,
     "rootDir": "src"
   },
+   "files" : [
+     "node_modules/typescript/lib/lib.d.ts",
+     "src/wanamu.d.ts",
+     "src/boot.ts",
+     "node_modules/rxjs/Rx.d.ts"
+   ],
   "exclude": [
     "node_modules"
   ]
