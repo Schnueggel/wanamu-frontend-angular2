@@ -6,10 +6,12 @@
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
     "tsc:w": "./node_modules/.bin/tsc -w",
+    "build:css": "./node_modules/.bin/copyfiles -u 1 src/**/*.css app",
+    "build:css:w": "./node_modules/.bin/watch-run -i -p \"src/**/*.css\" npm run build:css",
     "build:html": "./node_modules/.bin/copyfiles -u 1 src/**/*.html src/**/*.css app",
-    "build:html:w": "./node_modules/.bin/watch-run -i -p \"src/**/*.html,src/**/*.css\" npm run build:html",
-    "build": "./node_modules/.bin/concurrent \"npm run build:html\" \"npm run tsc\"",
-    "build:w": "./node_modules/.bin/concurrent \"npm run build:html:w\" \"npm run tsc:w\"",
+    "build:html:w": "./node_modules/.bin/watch-run -i -p \"src/**/*.html\" npm run build:html",
+    "build": "./node_modules/.bin/concurrent \"npm run build:html\"  \"npm run build:css\" \"npm run tsc\"",
+    "build:w": "./node_modules/.bin/concurrent \"npm run build:html:w\" \"npm run build:css:w\" \"npm run tsc:w\"",
     "serve": "./node_modules/.bin/lite-server --baseDir ./ --baseDir app",
     "start": "./node_modules/.bin/concurrent \"npm run build:w\" \"npm run serve\""
   },
