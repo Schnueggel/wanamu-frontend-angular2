@@ -1,0 +1,1 @@
+The frontend of my todo app made with angular 2
