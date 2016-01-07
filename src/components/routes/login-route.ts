@@ -16,7 +16,7 @@ export class LoginRouteComponent {
      * @param hmm
      * @param model
      */
-    onLogin(hmm:any, model: wu.model.User) {
-        console.log(model);
+    onLogin(hmm:any, model: wu.model.User,a,b) {
+        console.log(hmm, model,a,b);
     }
 }
