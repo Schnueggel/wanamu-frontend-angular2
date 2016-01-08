@@ -11,12 +11,13 @@ export class LoginRouteComponent {
 
     constructor(private authService: AuthService) {}
 
+    isLoading: boolean = false;
+
     /**
-     * TODO the output event somehow delivers a first value of undefined and the second is the emitted value. This could be a bug and change in the future.
-     * @param hmm
      * @param model
      */
-    onLogin(hmm:any, model: wu.model.User,a,b) {
-        console.log(hmm, model,a,b);
+    onLogin(model: wu.model.User) {
+        this.isLoading = true;
+        setTimeout(() => this.isLoading = false, 5000);
     }
 }

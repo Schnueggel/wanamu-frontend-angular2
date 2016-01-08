@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter} from 'angular2/core';
+import {Component, Output, EventEmitter, Input} from 'angular2/core';
 import {NgForm, Control, ControlGroup, FORM_DIRECTIVES}    from 'angular2/common';
 import User = wu.model.User;
 
@@ -24,13 +24,15 @@ export class LoginFormComponent {
     usernamePattern: RegExp = /(^[a-zA-Z0-9_-]{8,}$)|(^[^ @]+@[^ @]+$)/;
     passwordPattern: RegExp = /^.{8,}$/;
 
+    @Input() isLoading: boolean = false;
+
     constructor() {
         this.usernameControl = new Control('', this.validateUsername.bind(this));
         this.passwordControl = new Control('', this.validatePassword.bind(this));
         this.loginForm       = new ControlGroup({username: this.usernameControl, password: this.passwordControl});
     }
 
-    onSubmit() {console.log(this.model);
+    onSubmit() {
         this.login.emit(this.model);
     }
 
