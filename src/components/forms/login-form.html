@@ -9,7 +9,7 @@
     <div class="form-group">
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" [(ngModel)]="model.password" [ngFormControl]="passwordControl">
-        <div [hidden]="usernameControl.valid" class="alert alert-danger">
+        <div [hidden]="passwordControl.valid" class="alert alert-danger">
             Please enter a valid password with at least 8 chars
         </div>
     </div>
