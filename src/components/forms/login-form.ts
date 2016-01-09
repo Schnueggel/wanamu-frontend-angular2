@@ -1,6 +1,6 @@
 import {Component, Output, EventEmitter, Input} from 'angular2/core';
 import {NgForm, Control, ControlGroup, FORM_DIRECTIVES}    from 'angular2/common';
-import User = wu.model.User;
+import Login = wu.model.Login;
 
 @Component({
     selector   : 'login-form',
@@ -12,9 +12,9 @@ export class LoginFormComponent {
      * Passing the submit event to the parent
      * @type {EventEmitter}
      */
-    @Output() login = new EventEmitter<User>();
+    @Output() login = new EventEmitter<Login>();
 
-    model: User = {username: '', password: ''};
+    model: Login = {username: '', password: ''};
 
     //We create references of the form and form controls to get more control over them especially custom validation
     loginForm: ControlGroup;

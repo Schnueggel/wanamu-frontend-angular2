@@ -20,13 +20,13 @@ export class AuthService {
             headers: headers
         })
         .map(res => res.json())
-        .map( (res: wu.model.Login) => {
+        .map( (res: wu.model.LoginData) => {
             this.storeLogin(res);
             return this.user;
         });
     }
 
-    storeLogin(loginData: wu.model.Login) {
+    storeLogin(loginData: wu.model.LoginData) {
         this.token = loginData.token;
         this.user = loginData.data[0];
     }
