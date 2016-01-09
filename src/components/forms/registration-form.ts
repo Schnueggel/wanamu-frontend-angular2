@@ -1,6 +1,5 @@
 import {Component, Output, EventEmitter, Input} from 'angular2/core';
 import {NgForm, Control, ControlGroup, FORM_DIRECTIVES, FormBuilder} from 'angular2/common';
-import User = wu.model.User;
 import {Validators} from 'angular2/common';
 
 @Component({
@@ -13,9 +12,9 @@ export class RegistrationFormComponent {
      * Passing the submit event to the parent
      * @type {EventEmitter}
      */
-    @Output() register = new EventEmitter<User>();
+    @Output() register = new EventEmitter<wu.model.Registration>();
 
-    model: User = {username: '', password: '', firstname: '', lastname: '', email: '', salutation: 'Mr'};
+    model: wu.model.Registration = {username: '', password: '', firstname: '', lastname: '', email: '', salutation: 'Mr'};
 
     //We create references of the form and form controls to get more control over them especially custom validation
     regForm: ControlGroup;

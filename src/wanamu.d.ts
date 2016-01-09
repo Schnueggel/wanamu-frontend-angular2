@@ -7,6 +7,17 @@ declare module wu {
     module model {
 
         interface User {
+            _id?: string;
+            firstname: string;
+            lastname: string;
+            password: string;
+            email: string;
+            username: string;
+            salutation: string;
+            defaultTodolistId: string;
+        }
+
+        interface Registration {
             firstname: string;
             lastname: string;
             password: string;

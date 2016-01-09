@@ -1,2 +1,5 @@
 <h1>Login</h1>
+<div class="alert alert-danger" role="alert" *ngIf="message">
+    {{ message }}
+</div>
 <login-form (login)="onLogin($event)" [isLoading]="isLoading"></login-form>
