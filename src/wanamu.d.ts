@@ -1,6 +1,8 @@
-///<reference path="../node_modules/rxjs/Rx.d.ts"/>
-
 declare module wu {
+
+    interface Config {
+        apiUrl: string;
+    }
 
     module model {
 
