@@ -16,6 +16,7 @@
      "node_modules/typescript/lib/lib.d.ts",
      "src/wanamu.d.ts",
      "src/boot.ts",
+     "src/components/app.ts",
      "node_modules/rxjs/Rx.d.ts"
    ],
   "exclude": [

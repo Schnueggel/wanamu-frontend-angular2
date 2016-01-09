@@ -18,9 +18,22 @@ declare module wu {
             password: string;
         }
 
+        interface Todo {
+            _id: string;
+            title: string;
+            description: string;
+            owner: string;
+            finished: boolean;
+        }
+
         interface LoginData {
             token: string;
             data: Array<User>
+        }
+
+        interface TodoData {
+            error?: any;
+            data?: Array<Todo>
         }
     }
 }

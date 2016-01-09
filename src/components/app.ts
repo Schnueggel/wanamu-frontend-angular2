@@ -12,6 +12,7 @@ import { WU_SERVICES } from '../services/services';
 @RouteConfig([
     {path: '/login', useAsDefault: true, name: 'Login', component: routes.LoginRouteComponent},
     {path: '/registration', name: 'Registration', component: routes.RegistrationRouteComponent},
+    {path: '/todolist/:id', name: 'TodoList', component: routes.TodoListRouteComponent},
 ])
 export class AppComponent {
 
