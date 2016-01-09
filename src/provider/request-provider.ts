@@ -1,17 +1,13 @@
-import { RequestOptions, Headers, RequestMethod } from 'angular2/http';
+import { RequestOptions, Headers, RequestMethod, BaseRequestOptions, HTTP_PROVIDERS } from 'angular2/http';
 import {AuthService} from '../services/AuthService';
 import {provide} from 'angular2/core';
+import {NG1_HTTP_BACKEND} from 'angular2/src/upgrade/constants';
 
 
-export class WuRequestOptions extends RequestOptions {
+export class WuRequestOptions extends BaseRequestOptions {
     constructor() {
-        super({
-            method: RequestMethod.Get,
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': AuthService.getToken()
-            })
-        });
+        super();
+        this.headers.set('Content-Type', 'application/json');
     }
 }
 

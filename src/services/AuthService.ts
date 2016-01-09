@@ -1,5 +1,5 @@
 import { Injectable, Inject, Injector, provide } from 'angular2/core';
-import { Http , Headers, Response, BaseRequestOptions, RequestOptions, HTTP_PROVIDERS } from 'angular2/http';
+import { Http , Headers, Response } from 'angular2/http';
 import { Observable } from 'rxjs/Rx';
 import {Router} from 'angular2/router';
 import 'rxjs/add/operator/map';
@@ -14,15 +14,18 @@ import User = wu.model.User;
 @Injectable()
 export class AuthService {
 
-    token: string;
-    user: wu.model.User;
+    static token: string;
+    static user: wu.model.User;
 
     constructor(private http: Http,
                 @Inject(WU_CONFIG) private config: wu.Config) {
     }
 
     login(username, password): Observable<User>  {
-        return this.http.post(`${this.config.apiUrl}/auth/login`, JSON.stringify({username, password}))
+
+        AuthService.clearToken();
+
+        return this.http.post(`${this.config.apiUrl}/auth/login`, JSON.stringify({username, password}), {})
         .catch((res: Response) => {
             console.error(res);
             if (res.status === 403) {
@@ -35,29 +38,24 @@ export class AuthService {
         .map( (res: Response) => res.json())
         .map( (res: wu.model.LoginData) => {
             this.storeLogin(res);
-            return this.user;
+            return AuthService.user;
         });
     }
 
     logout() {
-        this.clearToken();
-        this.user = null;
+        AuthService.clearToken();
+        AuthService.user = null;
     }
 
     storeLogin(loginData: wu.model.LoginData) {
-        this.token = loginData.token;
-        this.user = loginData.data[0];
+        AuthService.token = loginData.token;
+        AuthService.user = loginData.data[0];
 
-        localStorage.setItem('token', this.token);
-
-        class JwtAuthRequestOptions extends BaseRequestOptions {
-            Authorization: string = `Bearer ${loginData.token}`;
-        }
-
-        Injector.resolveAndCreate([provide(RequestOptions, {useClass: JwtAuthRequestOptions})]);
+        localStorage.setItem('token', AuthService.token);
     }
 
-    clearToken() {
+    static clearToken() {
+        AuthService.token = null;
         localStorage.removeItem('token');
     }
 
