@@ -1,0 +1,68 @@
+<form (ngSubmit)="onSubmit()" [ngFormModel]="regForm">
+    <div class="form-group">
+        <label for="salutation">Salutation*</label>
+        <select id="salutation" [(ngModel)]="model.salutation"
+                class="form-control"
+                #salutation="ngForm"
+                [ngFormControl]="regForm.controls['salutation']">
+            <option *ngFor="#option of salutations">{{option}}<option>
+        </select>
+        <div [hidden]="salutation.control.valid || !salutation.control.touched" class="alert alert-danger">
+            Salutation is required
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="username">Username*</label>
+        <input type="text" class="form-control" id="username" [(ngModel)]="model.username"
+               #username="ngForm"
+               [ngFormControl]="regForm.controls['username']">
+        <div [hidden]="username.control.valid || !username.control.touched" class="alert alert-danger">
+            Please enter a valid username
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="email">Email*</label>
+        <input type="text" class="form-control" id="email" [(ngModel)]="model.email"
+               #email="ngForm"
+               [ngFormControl]="regForm.controls['email']">
+        <div [hidden]="email.control.valid || !email.control.touched" class="alert alert-danger">
+            Please enter a valid email
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="firstname">Firstname*</label>
+        <input type="text" class="form-control" id="firstname"
+               #firstname="ngForm"
+               [(ngModel)]="model.firstname" [ngFormControl]="regForm.controls['firstname']">
+        <div [hidden]="firstname.control.valid || !firstname.control.touched" class="alert alert-danger">
+            Firstname is required
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="lastname">Lastname*</label>
+        <input type="text" class="form-control" id="lastname" [(ngModel)]="model.lastname"
+               #lastname="ngForm"
+               [ngFormControl]="regForm.controls['lastname']">
+        <div [hidden]="lastname.control.valid || !lastname.control.touched" class="alert alert-danger">
+            Lastname is required
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password">Password*</label>
+        <input type="password" class="form-control"
+               id="password" [(ngModel)]="model.password"
+               #password="ngForm"
+               [ngFormControl]="regForm.controls['password']">
+        <div [hidden]="password.control.valid || !password.control.touched" class="alert alert-danger">
+            Please enter a valid password with at least 8 chars
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password-repeat">Password Repeat*</label>
+        <input type="password" class="form-control" id="password-repeat" [ngFormControl]="regForm.controls['passwordRepeat']" #passwordR="ngForm">
+        <div [hidden]="passwordR.control.valid || !passwordR.control.touched" class="alert alert-danger">
+            Password repeat and password must match
+        </div>
+    </div>
+    <button type="submit" class="btn btn-default" [disabled]="!regForm.valid || isLoading">Login</button>
+</form>
