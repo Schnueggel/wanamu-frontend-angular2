@@ -15,3 +15,25 @@ login-route, registration-route {
     align-self: center;
     margin-top: -20rem;
 }
+
+todo-list-route {
+    width: 100%;
+}
+
+todo-list {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+}
+
+todo {
+    flex: 0 1 300px;
+    background: silver;
+    padding: 1rem;
+    cursor: pointer;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);
+}
+
+todo h2 {
+    margin: 0;
+}

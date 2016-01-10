@@ -2,7 +2,7 @@ import { Component } from 'angular2/core';
 import { LoginFormComponent } from '../forms/login-form';
 import { AuthService } from '../../services/AuthService';
 import { LoginFailedError } from '../../services/errors/errors';
-import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/finally';
 import {Router} from 'angular2/router';
 
 @Component({

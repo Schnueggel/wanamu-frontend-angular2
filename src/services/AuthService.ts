@@ -19,6 +19,15 @@ export class AuthService {
 
     constructor(private http: Http,
                 @Inject(WU_CONFIG) private config: wu.Config) {
+
+        // TODO: Use official Angular2 CORS support when merged (https://github.com/angular/angular/issues/4231).
+        // https://github.com/angular/angular/issues/4231
+        let _build = (<any> http)._backend._browserXHR.build;
+        (<any> http)._backend._browserXHR.build = () => {
+            let _xhr =  _build();
+            _xhr.withCredentials = true;
+            return _xhr;
+        };
     }
 
     login(username, password): Observable<User>  {
@@ -61,6 +70,13 @@ export class AuthService {
 
     static getToken() {
         return localStorage.getItem('token');
+    }
+
+    static setAuthHeaders(headers: Headers) {
+        const token = AuthService.getToken();
+        if (token) {
+            headers.append('Authorization', `Bearer ${token}`);
+        }
     }
 
     static canActivateAuthCheck(nextInstr: any, currInstr: any) {

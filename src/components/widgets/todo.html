@@ -1,0 +1,10 @@
+<div class="toolbar"></div>
+<h2 *ngIf="!editTitle">{{todo.title}}</h2>
+<h2 *ngIf="editTitle">
+    <input type="text" [(ngModel)]="todo.title">
+</h2>
+<div class="description" *ngIf="!editDescription">{{todo.description}}</div>
+<div class="description" *ngIf="editDescription">
+    <textarea rows="3">{{todo.description}}</textarea>
+</div>
+<div class="colorbar"></div>

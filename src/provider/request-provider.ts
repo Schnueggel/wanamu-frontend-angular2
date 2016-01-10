@@ -5,9 +5,12 @@ import {NG1_HTTP_BACKEND} from 'angular2/src/upgrade/constants';
 
 
 export class WuRequestOptions extends BaseRequestOptions {
+    withCredentials: boolean = true;
+
     constructor() {
         super();
         this.headers.set('Content-Type', 'application/json');
+        this.headers.set('X-Requested-With', 'XMLHttpRequest');
     }
 }
 

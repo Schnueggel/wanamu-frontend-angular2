@@ -1,24 +1,61 @@
-import {Injectable} from 'angular2/core';
-import {Http , Headers} from 'angular2/http';
-import {Observable} from 'rxjs/Rx';
+import { Injectable } from 'angular2/core';
+import { Http , Headers, Response } from 'angular2/http';
+import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
+import { WU_CONFIG } from '../config';
+import { Inject } from 'angular2/core';
+import {AuthService} from './AuthService';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/publish';
+import 'rxjs/add/operator/mergeMap';
+
+import TodoData = wu.model.TodoData;
+import Todo = wu.model.Todo;
+
 
 @Injectable()
 export class TodoListService {
 
-    constructor(private http: Http) {}
+    currentTodos: Observable<wu.model.Todo[]>;
+    loadingTodos: Observable<wu.model.Todo[]>;
 
-    getTodos(todoListId: number): Observable<wu.model.Todo[]>  {
-        const headers = new Headers();
+    loadingCount: number = 0;
 
-        headers.set('Content-Type', 'application/json');
+    private nextTodos: BehaviorSubject<wu.model.Todo[]> = new BehaviorSubject([]);
+    private startLoadingTodo: Subject<string>              = new Subject();
 
-        return this.http.get(`http://localhost:8080/todolist/${todoListId}`,{
-            headers: headers
-        })
-        .map(res => res.json())
-        .map( (res: wu.model.TodoData) => {
-            return res;
+    constructor(private http: Http, private authService: AuthService, @Inject(WU_CONFIG) private config) {
+        this.currentTodos = this.nextTodos
+            .publish().refCount();
+
+        this.loadingTodos = this.startLoadingTodo
+            .mergeMap((id: string) => {
+                this.loadingCount += 1;
+
+                const headers = new Headers();
+
+                AuthService.setAuthHeaders(headers);
+
+                return this.http.get(`${this.config.apiUrl}/todolist/${id}`, {
+                    headers
+                })
+            })
+            .do( () => this.loadingCount -= 1)
+            .map<Response, TodoData>(res => res.json())
+            .map<TodoData, Todo[]>((res: TodoData) => {
+                return res.data;
+            }).publish().refCount();
+
+        this.loadingTodos.subscribe((data: Todo[]) => {console.log(data);
+            this.nextTodos.next(data);
         });
+    }
+
+    loadTodos(todoListId: string): Observable<Todo[]> {console.log('hund');
+        this.startLoadingTodo.next(todoListId);
+        return this.currentTodos;
     }
 }
 
