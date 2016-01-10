@@ -1,9 +1,9 @@
-import { Injectable } from 'angular2/core';
+import { Injectable, Inject } from 'angular2/core';
 import { Http , Headers, Response } from 'angular2/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
 import { WU_CONFIG } from '../config';
-import { Inject } from 'angular2/core';
-import {AuthService} from './AuthService';
+import { AuthService } from './AuthService';
+import * as Immutable from 'immutable';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
@@ -24,7 +24,7 @@ export class TodoListService {
     loadingCount: number = 0;
 
     private nextTodos: BehaviorSubject<wu.model.Todo[]> = new BehaviorSubject([]);
-    private startLoadingTodo: Subject<string>              = new Subject();
+    private startLoadingTodo: Subject<string>           = new Subject();
 
     constructor(private http: Http, private authService: AuthService, @Inject(WU_CONFIG) private config) {
         this.currentTodos = this.nextTodos
@@ -48,12 +48,12 @@ export class TodoListService {
                 return res.data;
             }).publish().refCount();
 
-        this.loadingTodos.subscribe((data: Todo[]) => {console.log(data);
+        this.loadingTodos.subscribe((data: Todo[]) => {
             this.nextTodos.next(data);
         });
     }
 
-    loadTodos(todoListId: string): Observable<Todo[]> {console.log('hund');
+    loadTodos(todoListId: string): Observable<Todo[]> {
         this.startLoadingTodo.next(todoListId);
         return this.currentTodos;
     }
