@@ -5,6 +5,6 @@
 </h2>
 <div class="description" (click)="descriptionEdit($event)" #description>
     <span *ngIf="!editDescription">{{todoModel.description}}</span>
-    <textarea rows="3"  *ngIf="editDescription"  (blur)="descriptionBlur($event)" class="form-control" [(ngModel)]="todoModel.description">{{todoModel.description}}</textarea>
+    <textarea rows="3" *ngIf="editDescription" (blur)="descriptionBlur($event)" class="form-control" [(ngModel)]="todoModel.description">{{todoModel.description}}</textarea>
 </div>
 <div class="colorbar"></div>

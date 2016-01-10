@@ -14,7 +14,6 @@ import 'rxjs/add/operator/mergeMap';
 import TodoData = wu.model.TodoData;
 import Todo = wu.model.Todo;
 
-
 @Injectable()
 export class TodoListService {
 
@@ -49,7 +48,8 @@ export class TodoListService {
             }).publish().refCount();
 
         this.loadingTodos.subscribe((data: Todo[]) => {
-            this.nextTodos.next(Immutable.fromJS(data));
+            const todoMap = data.reduce( (map, v) => {map[v._id] = v; return map}, {} );
+            this.nextTodos.next(Immutable.fromJS(todoMap));
         });
     }
 
