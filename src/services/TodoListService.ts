@@ -18,12 +18,12 @@ import Todo = wu.model.Todo;
 @Injectable()
 export class TodoListService {
 
-    currentTodos: Observable<wu.model.Todo[]>;
+    currentTodos: Observable<Immutable.List<wu.model.Todo>>;
     loadingTodos: Observable<wu.model.Todo[]>;
 
     loadingCount: number = 0;
 
-    private nextTodos: BehaviorSubject<wu.model.Todo[]> = new BehaviorSubject([]);
+    private nextTodos: BehaviorSubject<Immutable.List<wu.model.Todo>> = new BehaviorSubject(Immutable.List([]));
     private startLoadingTodo: Subject<string>           = new Subject();
 
     constructor(private http: Http, private authService: AuthService, @Inject(WU_CONFIG) private config) {
@@ -49,11 +49,11 @@ export class TodoListService {
             }).publish().refCount();
 
         this.loadingTodos.subscribe((data: Todo[]) => {
-            this.nextTodos.next(data);
+            this.nextTodos.next(Immutable.fromJS(data));
         });
     }
 
-    loadTodos(todoListId: string): Observable<Todo[]> {
+    loadTodos(todoListId: string): Observable<Immutable.List<wu.model.Todo>> {
         this.startLoadingTodo.next(todoListId);
         return this.currentTodos;
     }

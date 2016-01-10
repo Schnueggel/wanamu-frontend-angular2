@@ -31,7 +31,7 @@ declare module wu {
             password: string;
         }
 
-        interface Todo {
+        interface Todo extends Immutable.Map<string, any> {
             _id: string;
             title: string;
             description: string;
