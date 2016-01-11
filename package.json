@@ -13,7 +13,7 @@
     "build": "./node_modules/.bin/concurrent \"npm run build:html\"  \"npm run build:css\" \"npm run tsc\"",
     "build:w": "./node_modules/.bin/concurrent \"npm run build:html:w\" \"npm run build:css:w\" \"npm run tsc:w\"",
     "serve": "./node_modules/.bin/lite-server --baseDir ./ --baseDir app",
-    "start": "./node_modules/.bin/concurrent \"npm run build:w\" \"npm run serve\""
+    "start": "./node_modules/.bin/concurrent  \"npm run build:html:w\" \"npm run build:css:w\" \"npm run tsc:w\" \"npm run serve\""
   },
   "author": "Christian Steinmann",
   "license": "ISC",
