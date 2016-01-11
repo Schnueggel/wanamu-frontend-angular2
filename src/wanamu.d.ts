@@ -31,22 +31,24 @@ declare module wu {
             password: string;
         }
 
-        interface Todo extends Immutable.Map<string, any> {
-            _id: string;
-            title: string;
-            description: string;
-            owner: string;
-            finished: boolean;
-        }
+        interface Todo extends TodoData, Immutable.Map<string, any> {}
 
         interface LoginData {
             token: string;
             data: Array<User>
         }
 
-        interface TodoData {
+        interface TodoResultData {
             error?: any;
             data?: Array<Todo>
+        }
+
+        interface TodoData {
+            _id?: string;
+            title: string;
+            description?: string;
+            owner?: string;
+            finished?: boolean;
         }
     }
 }

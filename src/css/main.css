@@ -26,7 +26,14 @@ todo-list {
     flex-direction: row;
 }
 
-todo {
+todo-list > * {
+    margin-left: 0.5rem;
+}
+todo-list todo:first-child, todo-list .add-todo:first-child {
+    margin-left: 0;
+}
+
+todo, .add-todo {
     flex: 0 1 300px;
     background: silver;
     padding: 1rem;

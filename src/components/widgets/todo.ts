@@ -1,17 +1,15 @@
 import { Component, Input, Output, ViewChild, NgZone, ElementRef, EventEmitter } from 'angular2/core';
 import { Router } from 'angular2/router';
 import * as Immutable from 'immutable';
-import { ImmutablePipe } from '../../pipes/immutable';
 
 @Component({
     selector   : 'todo',
-    templateUrl: 'app/components/widgets/todo.html',
-    pipes : [ImmutablePipe]
+    templateUrl: 'app/components/widgets/todo.html'
 })
 export class TodoComponent {
 
     @Input() todo: wu.model.Todo;
-    @Output() todoChanged: EventEmitter =  new EventEmitter<wu.model.Todo>();
+    @Output() todoChanged: EventEmitter<wu.model.Todo> =  new EventEmitter<wu.model.Todo>();
 
     editDescription: boolean = false;
     editTitle: boolean = false;
@@ -23,7 +21,7 @@ export class TodoComponent {
 
     constructor(private ngZone: NgZone) {}
 
-    ngOnInit() {
+    ngOnInit() {console.log(this.todo);
         this.todoModel = this.todo.toJS();
     }
 
@@ -49,7 +47,7 @@ export class TodoComponent {
 
     set(key) {
         if (this.todoModel[key] !== this.todo.get(key)) {
-            this.todoChanged.emit(this.todo.set(key, this.todoModel[key]));
+            this.todoChanged.emit(this.todo.set(key, this.todoModel[key]) as wu.model.Todo);
         }
     }
 

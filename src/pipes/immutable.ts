@@ -4,10 +4,12 @@ import {Pipe, PipeTransform} from 'angular2/core';
     name: 'immutable',
     pure: false
 })
-export class ImmutablePipe  implements PipeTransform {
+export class UnMapPipe  implements PipeTransform {
 
     transform(value:any, args:string[]):any {
-        console.log(value);
+        if (typeof value === 'object' && typeof value.values === 'function') {
+            return value.values();
+        }
 
         return value;
     }

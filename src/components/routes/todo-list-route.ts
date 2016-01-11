@@ -46,4 +46,11 @@ export class TodoListRouteComponent implements OnInit, OnDestroy {
     onTodosError(e) {
         console.error(e);
     }
+
+    onAddTodo() {console.log('hund');
+        this.todoListService.addTodo({
+            title: '',
+            description: ''
+        });
+    }
 }

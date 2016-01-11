@@ -11,9 +11,14 @@ import {Router} from 'angular2/router';
 export class TodoListComponent {
 
     @Input() todos: Array<wu.model.Todo>;
-    @Output() todoChanged: EventEmitter = new EventEmitter<wu.model.Todo>();
+    @Output() todoChanged: EventEmitter<wu.model.Todo> = new EventEmitter<wu.model.Todo>();
+    @Output() addTodo: EventEmitter<void> = new EventEmitter<void>();
 
     onTodoChanged(model: wu.model.Todo) {
         this.todoChanged.emit(model);
+    }
+
+    onAddTodo() {
+        this.addTodo.emit(undefined);
     }
 }
