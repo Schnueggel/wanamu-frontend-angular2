@@ -41,7 +41,7 @@ export class TodoListService {
         this.currentTodos.subscribe();
 
         this.loadingTodos = this.startLoadingTodo
-            .mergeMap((id: string) => {
+            .mergeMap<string>((id: string) => {
                 this.loadingCount += 1;
 
                 const headers = new Headers();
@@ -62,11 +62,11 @@ export class TodoListService {
             const todoMap = data.reduce((map, v) => {
                 map[v._id] = Immutable.fromJS(v);
                 return map;
-            }, {});
-            this.nextTodos.next(Immutable.OrderedMap(todoMap));
+            }, {}) as any;
+            this.nextTodos.next(Immutable.OrderedMap<string, wu.model.Todo>(todoMap));
         });
 
-        this.addingTodo = this.startAddingTodo
+        let test = this.addingTodo = this.startAddingTodo
             .mergeMap((todo: Todo) => {
                 this.loadingCount += 1;
 
@@ -83,22 +83,15 @@ export class TodoListService {
             .map<TodoResultData, TodoResultData>((res: TodoResultData) => {
                 return res.data[0];
             })
-            //.combineLatest(this.currentTodos, (data: wu.model.TodoData, todoList: Immutable.Map<string, Todo>) => {
-            //    console.log('huhuhu');
-            //    const todo = Immutable.Map(data);
-            //    this.nextTodos.next(todoList.set(data._id, todo));
-            //    return todo;
-            //})
             .publish().refCount();
 
-        this.addingTodo.subscribe((r) => { console.log('hunudd');
-            this.currentTodos.subscribe( x => {
+        this.addingTodo.subscribe((r) => {
+            const subscription = this.currentTodos.subscribe( x => {
                 const todo = Immutable.Map(r);
                 this.nextTodos.next(x.set(r._id, todo));
-                return todo;
+                subscription.unsubscribe();
             });
         });
-
     }
 
     addTodo(todo: wu.model.TodoData) {

@@ -39,7 +39,7 @@ export class TodoListRouteComponent implements OnInit, OnDestroy {
             )
     }
 
-    onTodoChanged(todo: wu.model.Todo & Immutable.Map) {
+    onTodoChanged(todo: wu.model.Todo) {
         console.log(todo);
     }
 
@@ -47,7 +47,7 @@ export class TodoListRouteComponent implements OnInit, OnDestroy {
         console.error(e);
     }
 
-    onAddTodo() {console.log('hund');
+    onAddTodo() {
         this.todoListService.addTodo({
             title: '',
             description: ''
