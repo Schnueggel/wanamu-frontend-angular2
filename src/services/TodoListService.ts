@@ -17,7 +17,8 @@ import 'rxjs/add/operator/combineLatest';
 
 import TodoResultData = wu.model.TodoResponseData;
 import Todo = wu.model.Todo;
-
+import TodoList = wu.model.TodoList;
+import TodoData = wu.model.TodoData;
 
 @Injectable()
 export class TodoListService {
@@ -57,17 +58,16 @@ export class TodoListService {
                 });
             })
             .do(() => this.loadingCount -= 1)
-            .map<Response, TodoResultData>(res => res.json())
-            .map<TodoResultData, Todo[]>((res: TodoResultData) => {
-                return res.data;
-            }).publish().refCount();
-
-        this.loadingTodos.subscribe((data: Todo[]) => {
-            const todoMap = data.reduce((map, v) => {
+            .map<Response, TodoResultData>( res => res.json())
+            .map<TodoResultData, Todo[]>( res => res.data)
+            .map<TodoData[], TodoList>( data => data.reduce((map, v: TodoData) => {
                 map[v._id] = Immutable.fromJS(v);
                 return map;
-            }, {}) as any;
+            }, {}))
+            .publish()
+            .refCount();
 
+        this.loadingTodos.subscribe((todoMap: any) => {
             this.todoList = Immutable.OrderedMap<string, wu.model.Todo>(todoMap);
             this.nextTodos.next(this.todoList);
         });
@@ -94,7 +94,8 @@ export class TodoListService {
             .do(() => this.loadingCount -= 1)
             .map<Response, TodoResultData>(res => res.json())
             .map<TodoResultData, TodoResultData>( res => Immutable.Map<string, any>(res.data[0]))
-            .publish().refCount();
+            .publish()
+            .refCount();
 
         // With nest subscribe cause combineLatest seems not to work with RefCountObservables
         // TODO open issue for combineLatest RefCountObservable
