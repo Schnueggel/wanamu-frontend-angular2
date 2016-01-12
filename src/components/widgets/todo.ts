@@ -1,12 +1,13 @@
 import { Component, Input, Output, ViewChild, NgZone, ElementRef, EventEmitter } from 'angular2/core';
 import { Router } from 'angular2/router';
 import * as Immutable from 'immutable';
+import { ChangeDetectionStrategy, OnInit } from 'angular2/core';
 
 @Component({
     selector   : 'todo',
     templateUrl: 'app/components/widgets/todo.html'
 })
-export class TodoComponent {
+export class TodoComponent implements OnInit {
 
     @Input() todo: wu.model.Todo;
     @Output() todoChanged: EventEmitter<wu.model.Todo> =  new EventEmitter<wu.model.Todo>();
@@ -21,16 +22,16 @@ export class TodoComponent {
 
     constructor(private ngZone: NgZone) {}
 
-    ngOnInit() {console.log(this.todo);
+    ngOnInit() {
         this.todoModel = this.todo.toJS();
     }
 
-    titleEdit() {
+    titleEdit() {console.log(this);
         this.editTitle = true;
         this.focusElement(this.title, 'input');
     }
 
-    titleBlur() {
+    titleBlur() {console.log('huhu');
         this.editTitle = false;
         this.set('title');
     }

@@ -50,14 +50,20 @@ todo, .add-todo {
     font-size: 6rem;
     align-self: center;
 }
+
 todo .title {
     margin: 0;
-    height: 4.5rem;
+    min-height: 4.5rem;
 }
 
 todo .description {
-    height: 7rem;
+    min-height: 7rem;
 }
+
+todo .text .empty {
+    opacity: 0.7;
+}
+
 todo .title, todo input, todo .description, todo textarea {
     width: 100%;
     box-sizing: border-box;

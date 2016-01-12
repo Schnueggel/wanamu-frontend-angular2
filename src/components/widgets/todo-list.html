@@ -1,4 +1,4 @@
-<todo [todo]="todo[1]" *ngFor="#todo of todos | async" (todoChanged)="onTodoChanged($event)"></todo>
+<todo [todo]="todo[1]" *ngFor="#todo of todos" (todoChanged)="onTodoChanged($event)"></todo>
 <div class="add-todo" (click)="onAddTodo($event)">
     <i class="material-icons">note_add</i>
 </div>

@@ -36,7 +36,7 @@ export class LoginRouteComponent {
     }
 
     loginSuccess(user: wu.model.User) {
-        this.router.navigate(['TodoList', {id: user.defaultTodolistId}])
+        this.router.navigate(['TodoList', {id: user.get('defaultTodolistId')}])
     }
 
     loginError(err: Error) {

@@ -1,2 +1,2 @@
 <h1>Todo List</h1>
-<todo-list [todos]="todoListService.currentTodos" (todoChanged)="onTodoChanged($event)" (addTodo)="onAddTodo($event)"></todo-list>
+<todo-list [todos]="todoListService.currentTodos  | async" (todoChanged)="onTodoChanged($event)" (addTodo)="onAddTodo($event)"></todo-list>

@@ -6,9 +6,7 @@ import {ChangeDetectionStrategy} from 'angular2/core';
 @Component({
     selector   : 'todo-list',
     templateUrl: 'app/components/widgets/todo-list.html',
-    directives : [TodoComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
-
+    directives : [TodoComponent]
 })
 export class TodoListComponent {
 
