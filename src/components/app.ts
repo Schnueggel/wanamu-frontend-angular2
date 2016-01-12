@@ -1,13 +1,11 @@
 import { Component } from 'angular2/core';
 import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 import routes from './routes/routes';
-import { WU_SERVICES } from '../services/services';
 
 @Component({
     selector  : 'app',
     template  : `<router-outlet></router-outlet>`,
-    directives: [ROUTER_DIRECTIVES],
-    providers: [WU_SERVICES]
+    directives: [ROUTER_DIRECTIVES]
 })
 @RouteConfig([
     {path: '/login', useAsDefault: true, name: 'Login', component: routes.LoginRouteComponent},

@@ -6,8 +6,15 @@ declare module wu {
 
     module model {
 
-        interface User {
-            _id?: string;
+        interface User extends UserData, Immutable.Map<string, any> {}
+
+        interface UserResponseData {
+            error?: any;
+            data?: Array<UserData>
+        }
+
+        interface UserData {
+            _id: string;
             firstname: string;
             lastname: string;
             password: string;
@@ -31,14 +38,14 @@ declare module wu {
             password: string;
         }
 
-        interface Todo extends TodoData, Immutable.Map<string, any> {}
-
         interface LoginData {
             token: string;
             data: Array<User>
         }
 
-        interface TodoResultData {
+        interface Todo extends TodoData, Immutable.Map<string, any> {}
+
+        interface TodoResponseData {
             error?: any;
             data?: Array<Todo>
         }
@@ -50,5 +57,7 @@ declare module wu {
             owner?: string;
             finished?: boolean;
         }
+
+        interface TodoList extends Immutable.OrderedMap<string, Todo> {}
     }
 }

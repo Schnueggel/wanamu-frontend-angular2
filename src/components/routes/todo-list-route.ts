@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy, Input } from 'angular2/core';
 import { TodoListService } from '../../services/TodoListService';
 import { RouteParams, CanActivate } from 'angular2/router';
-import { AuthService } from '../../services/AuthService';
 import { TodoListComponent } from '../widgets/todo-list';
-
 import {Subscription} from 'rxjs/Subscription';
+
+import {canActivateAuthCheck} from '../../util/can-activate';
 
 @Component({
     selector   : 'todo-list-route',
     templateUrl: 'app/components/routes/todo-list-route.html',
     directives : [TodoListComponent]
 })
-@CanActivate(AuthService.canActivateAuthCheck)
+@CanActivate(canActivateAuthCheck)
 export class TodoListRouteComponent implements OnInit, OnDestroy {
 
     isLoading: boolean = false;

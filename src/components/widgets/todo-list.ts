@@ -1,12 +1,14 @@
 import { Component, Input, Output,  EventEmitter } from 'angular2/core';
 import { TodoComponent } from './todo';
 import {Router} from 'angular2/router';
-
+import {ChangeDetectionStrategy} from 'angular2/core';
 
 @Component({
     selector   : 'todo-list',
     templateUrl: 'app/components/widgets/todo-list.html',
-    directives : [TodoComponent]
+    directives : [TodoComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class TodoListComponent {
 
