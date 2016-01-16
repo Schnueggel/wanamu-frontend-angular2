@@ -1,16 +1,24 @@
 import {Pipe, PipeTransform} from 'angular2/core';
 
 @Pipe({
-    name: 'immutable',
+    name: 'toArray',
     pure: false
 })
-export class UnMapPipe  implements PipeTransform {
+export class ToArrayPipe  implements PipeTransform {
+    orgValue: any;
+    data: Array<any>;
 
     transform(value:any, args:string[]):any {
-        if (typeof value === 'object' && typeof value.values === 'function') {
-            return value.values();
+        if (this.orgValue !== value) {
+            this.orgValue = value;
+
+            if (typeof this.orgValue === 'object' && typeof this.orgValue.toArray === 'function') {
+                this.data = this.orgValue.toArray();
+            } else {
+                this.data = value;
+            }
         }
 
-        return value;
+        return this.data;
     }
 }

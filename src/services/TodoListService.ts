@@ -20,31 +20,29 @@ import Todo = wu.model.Todo;
 import TodoList = wu.model.TodoList;
 import TodoData = wu.model.TodoData;
 
+import {TodoListStore} from '../stores/TodoListStore';
+import {TodoModel} from '../models/todo-models';
+
 @Injectable()
 export class TodoListService {
 
     NEW_TODO_PREFIX: string = 'NEW_TODO_PREFIX';
 
-    currentTodos: Observable<wu.model.TodoList>;
     loadingTodos: Observable<wu.model.TodoData[]>;
     addingTodo: Observable<Todo>;
 
     loadingCount: number = 0;
 
-    private nextTodos: Subject<Immutable.Map<string, Todo>>   = new Subject();
     private startLoadingTodo: Subject<string>                       = new Subject();
-    private startAddingTodo: Subject<Immutable.Map<string, any>>    = new Subject();
-    private todoList: wu.model.TodoList = Immutable.Map({});
+    private startAddingTodo: Subject<Immutable.Map<string, any>>    = new Subject();;
     /**
      *
      * @param http
      * @param authService
      * @param config
+     * @param todoListStore
      */
-    constructor(private http: Http, private authService: AuthService, @Inject(WU_CONFIG) private config) {
-        this.currentTodos = this.nextTodos
-            .publish().refCount();
-
+    constructor(private http: Http, private authService: AuthService, @Inject(WU_CONFIG) private config, private todoListStore: TodoListStore) {
         this.loadingTodos = this.startLoadingTodo
             .mergeMap<string>((id: string) => {
                 this.loadingCount += 1;
@@ -61,15 +59,15 @@ export class TodoListService {
             .map<Response, TodoResultData>( res => res.json())
             .map<TodoResultData, Todo[]>( res => res.data)
             .map<TodoData[], TodoList>( data => data.reduce((map, v: TodoData) => {
-                map[v._id] = Immutable.fromJS(v);
+                map[v._id] = new TodoModel(v);
                 return map;
             }, {}))
             .publish()
             .refCount();
 
         this.loadingTodos.subscribe((todoMap: any) => {
-            this.todoList = Immutable.OrderedMap<string, wu.model.Todo>(todoMap);
-            this.nextTodos.next(this.todoList);
+            const todoList = Immutable.OrderedMap<string, wu.model.Todo>(todoMap);
+            this.todoListStore.dispatch( () => todoList );
         });
 
         this.initTodoStreams();
@@ -100,9 +98,7 @@ export class TodoListService {
         // With nest subscribe cause combineLatest seems not to work with RefCountObservables
         // TODO open issue for combineLatest RefCountObservable
         this.addingTodo.subscribe((todo: wu.model.Todo) => {
-            this.currentTodos.toPromise().then( x => {
-                this.nextTodos.next(x.set(todo.get('_id'), todo));
-            });
+            this.todoListStore.dispatch((x) => x.set(todo.get('_id'), todo));
         });
     }
 
@@ -112,9 +108,8 @@ export class TodoListService {
      * @returns {Observable<TodoList>}
      */
     addTodo(todo: wu.model.TodoData) {
-        this.nextTodos.next(this.todoList = this.todoList.set(`${this.NEW_TODO_PREFIX}${uuid()}`, Immutable.fromJS(todo)));
-
-        return this.currentTodos;
+        const tempId = `${this.NEW_TODO_PREFIX}${uuid()}`;
+        this.todoListStore.dispatch((x) => x.set(tempId, Immutable.fromJS(todo)));
     }
 
     /**
@@ -122,9 +117,9 @@ export class TodoListService {
      * @param todoListId
      * @returns {Observable<Immutable.List<wu.model.Todo>>}
      */
-    loadTodos(todoListId: string): Observable<Immutable.Map<string, Todo>> {
+    loadTodos(todoListId: string) {
         this.startLoadingTodo.next(todoListId);
-        return this.currentTodos;
+        return this.loadingTodos;
     }
 }
 

@@ -7,4 +7,4 @@
     <span *ngIf="!editDescription" class="text" [class.empty]="!todoModel.description">{{todoModel.description || 'Enter your Description...'}}</span>
     <textarea rows="3" *ngIf="editDescription" (blur)="descriptionBlur($event)" class="form-control" [(ngModel)]="todoModel.description" placeholder="Enter Description">{{todoModel.description}}</textarea>
 </div>
-<div class="colorbar"></div>{{test}}
+<div class="colorbar"></div>

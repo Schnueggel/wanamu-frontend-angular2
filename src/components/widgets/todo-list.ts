@@ -6,7 +6,8 @@ import {ChangeDetectionStrategy} from 'angular2/core';
 @Component({
     selector   : 'todo-list',
     templateUrl: 'app/components/widgets/todo-list.html',
-    directives : [TodoComponent]
+    directives : [TodoComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodoListComponent {
 
@@ -14,11 +15,23 @@ export class TodoListComponent {
     @Output() todoChanged: EventEmitter<wu.model.Todo> = new EventEmitter<wu.model.Todo>();
     @Output() addTodo: EventEmitter<void> = new EventEmitter<void>();
 
+    constructor() {
+
+    }
+
     onTodoChanged(model: wu.model.Todo) {
         this.todoChanged.emit(model);
     }
 
+    ngOnInit() {
+        console.log(this.todos);
+    }
+
     onAddTodo() {
         this.addTodo.emit(undefined);
+    }
+
+    random() { console.log(Math.random());
+        return 3;
     }
 }

@@ -2,28 +2,32 @@ import { Component, Input, Output, ViewChild, NgZone, ElementRef, EventEmitter }
 import { Router } from 'angular2/router';
 import * as Immutable from 'immutable';
 import { ChangeDetectionStrategy, OnInit } from 'angular2/core';
+import { TodoModel } from '../../models/todo-models';
 
 @Component({
     selector   : 'todo',
-    templateUrl: 'app/components/widgets/todo.html'
+    templateUrl: 'app/components/widgets/todo.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodoComponent implements OnInit {
 
-    @Input() todo: wu.model.Todo;
+    @Input() todoMap: TodoModel;
     @Output() todoChanged: EventEmitter<wu.model.Todo> =  new EventEmitter<wu.model.Todo>();
 
     editDescription: boolean = false;
     editTitle: boolean = false;
 
-    todoModel: any;
+    todoModel: any = {};
 
     @ViewChild('description') description: ElementRef;
     @ViewChild('title') title: ElementRef;
 
-    constructor(private ngZone: NgZone) {}
+    constructor(private ngZone: NgZone) {
+        console.log(this.todoMap);
+    }
 
     ngOnInit() {
-        this.todoModel = this.todo.toJS();
+        this.todoModel = {};
     }
 
     titleEdit() {console.log(this);
@@ -47,8 +51,8 @@ export class TodoComponent implements OnInit {
     }
 
     set(key) {
-        if (this.todoModel[key] !== this.todo.get(key)) {
-            this.todoChanged.emit(this.todo.set(key, this.todoModel[key]) as wu.model.Todo);
+        if (this.todoModel[key] !== this.todoMap.get(key) && this.todoModel.title) {
+            this.todoChanged.emit(this.todoMap.set(key, this.todoModel[key]) as wu.model.Todo);
         }
     }
 

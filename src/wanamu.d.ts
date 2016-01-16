@@ -43,7 +43,7 @@ declare module wu {
             data: Array<User>
         }
 
-        interface Todo extends TodoData, Immutable.Map<string, any> {}
+        interface Todo extends TodoData {}
 
         interface TodoResponseData {
             error?: any;
@@ -55,9 +55,29 @@ declare module wu {
             title: string;
             description?: string;
             owner?: string;
+            color?: string;
             finished?: boolean;
         }
 
         interface TodoList extends Immutable.OrderedMap<string, Todo> {}
+    }
+}
+
+declare module Immutable {
+    export function Record<T>(defaultValues: T, name?: string): Record.Factory<T>;
+
+    export module Record {
+        type BaseMap<T> = T & Base<T>;
+
+        interface Base<T> extends Map<string, any> {
+            set(key: string, value: any): BaseMap<T>;
+        }
+
+        interface Factory<T> {
+            new (): Base<T>;
+            new (values: T): Base;
+            (): Base;
+            (values: T): Base;
+        }
     }
 }
