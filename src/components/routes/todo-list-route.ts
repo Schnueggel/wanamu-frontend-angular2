@@ -7,11 +7,15 @@ import {ChangeDetectionStrategy} from 'angular2/core';
 import {canActivateAuthCheck} from '../../util/can-activate';
 import {TodoListStore} from '../../stores/TodoListStore';
 import {TodoModel} from '../../models/todo-models';
+import {ToObservablePipe} from '../../pipes/immutable';
+
+import {TodoData} from '../widgets/todo';
 
 @Component({
     selector   : 'todo-list-route',
     templateUrl: 'app/components/routes/todo-list-route.html',
-    directives : [TodoListComponent]
+    directives : [TodoListComponent],
+    pipes: [ToObservablePipe]
 })
 @CanActivate(canActivateAuthCheck)
 export class TodoListRouteComponent implements OnInit, OnDestroy {
@@ -21,21 +25,16 @@ export class TodoListRouteComponent implements OnInit, OnDestroy {
     todoList: Array<TodoModel>;
 
     todoListSubscription: Subscription;
-    todoListStoreSubscription: Subscription;
 
     constructor(private routeParams: RouteParams, public todoListService: TodoListService, public todoListStore: TodoListStore) {
         this.id = routeParams.get('id');
     }
 
     ngOnInit() {
-        this.todoListStoreSubscription = this.todoListStore.currentTodosStream.subscribe((todoList : any) => {
-            this.todoList = todoList.toArray();console.log(this.todoList);
-        });
         this.loadTodos();
     }
 
     ngOnDestroy() {
-        this.todoListStoreSubscription.unsubscribe();
         this.todoListSubscription.unsubscribe();
     }
 
@@ -48,8 +47,9 @@ export class TodoListRouteComponent implements OnInit, OnDestroy {
             )
     }
 
-    onTodoChanged(todo: wu.model.Todo) {
-        console.log(todo);
+    onTodoChange(todo: TodoModel) {
+        this.todoListService.updateTodo(todo);
+        console.log('todo changed bubbled up', todo);
     }
 
     onTodosError(e) {

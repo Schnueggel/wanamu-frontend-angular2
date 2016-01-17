@@ -1,4 +1,4 @@
-<todo [todoMap]="todo" *ngFor="#todo of todos" (todoChanged)="onTodoChanged($event)"></todo>
+<todo [todoStream]="todo" *ngFor="#todo of todos" (todoChange)="onTodoChange($event)"></todo>
 <div class="add-todo" (click)="onAddTodo($event)">
     <i class="material-icons">note_add</i>
 </div>

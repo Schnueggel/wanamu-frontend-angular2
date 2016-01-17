@@ -21,7 +21,7 @@ import TodoList = wu.model.TodoList;
 import TodoData = wu.model.TodoData;
 
 import {TodoListStore} from '../stores/TodoListStore';
-import {TodoModel} from '../models/todo-models';
+import {TodoModel, TodoDataModel} from '../models/todo-models';
 
 @Injectable()
 export class TodoListService {
@@ -59,20 +59,24 @@ export class TodoListService {
             .map<Response, TodoResultData>( res => res.json())
             .map<TodoResultData, Todo[]>( res => res.data)
             .map<TodoData[], TodoList>( data => data.reduce((map, v: TodoData) => {
-                map[v._id] = new TodoModel(v);
+                map[v._id] = new TodoModel({
+                    data: new TodoDataModel(v)
+                });
                 return map;
             }, {}))
             .publish()
             .refCount();
 
         this.loadingTodos.subscribe((todoMap: any) => {
-            const todoList = Immutable.OrderedMap<string, wu.model.Todo>(todoMap);
-            this.todoListStore.dispatch( () => todoList );
+            this.todoListStore.dispatch( ( map ) => map.merge(todoMap) );
         });
 
         this.initTodoStreams();
     }
 
+    updateTodo(todoModel: TodoModel) {
+        this.todoListStore.dispatch( tList => tList.update(todoModel.data._id, todo => todo.merge(todoModel)));
+    }
     /**
      * Initializes the todo streams
      */

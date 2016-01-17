@@ -75,9 +75,9 @@ declare module Immutable {
 
         interface Factory<T> {
             new (): Base<T>;
-            new (values: T): Base;
-            (): Base;
-            (values: T): Base;
+            new (values: T): Base<T>;
+            (): Base<T>;
+            (values: T): Base<T>;
         }
     }
 }

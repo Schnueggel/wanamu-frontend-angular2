@@ -1,65 +1,128 @@
 import { Component, Input, Output, ViewChild, NgZone, ElementRef, EventEmitter } from 'angular2/core';
 import { Router } from 'angular2/router';
 import * as Immutable from 'immutable';
-import { ChangeDetectionStrategy, OnInit } from 'angular2/core';
+import { OnInit, AfterViewInit, OnDestroy } from 'angular2/core';
 import { TodoModel } from '../../models/todo-models';
+import { Observable, Subscription } from 'rxjs/Rx';
+import {OnChanges} from 'angular2/core';
+
+export interface Data {
+    title?: string;
+    description?: string;
+}
+
+export interface TodoData {
+    isEditingTitle?: boolean;
+    isEditingDescription?: boolean;
+    data?: Data & Immutable.Map<string, string>
+}
+
+type TodoMap = TodoData & Immutable.Map<string, any>;
 
 @Component({
     selector   : 'todo',
-    templateUrl: 'app/components/widgets/todo.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: 'app/components/widgets/todo.html'
 })
-export class TodoComponent implements OnInit {
+export class TodoComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
-    @Input() todoMap: TodoModel;
-    @Output() todoChanged: EventEmitter<wu.model.Todo> =  new EventEmitter<wu.model.Todo>();
-
-    editDescription: boolean = false;
-    editTitle: boolean = false;
-
-    todoModel: any = {};
+    @Input() todoMap: TodoMap;
+    @Input() todoStream: Observable;
+    @Output() todoChange: EventEmitter<TodoMap> =  new EventEmitter<TodoMap>();
 
     @ViewChild('description') description: ElementRef;
     @ViewChild('title') title: ElementRef;
 
+    todoModel: TodoData = {
+        data: {
+            title      : '',
+            description: ''
+        },
+        isEditingTitle: false,
+        isEditingDescription: false
+    } as TodoData;
+
+    todoStreamSubscription: Subscription;
+
     constructor(private ngZone: NgZone) {
-        console.log(this.todoMap);
+
     }
 
     ngOnInit() {
-        this.todoModel = {};
+        if (this.todoStream) {
+            this.todoStreamSubscription = this.todoStream.subscribe((map: TodoMap) => {
+                this.ngZone.run(() => {
+                    this.todoMap = map;
+                    this._map(map);
+
+                    setTimeout( () => this.ngAfterViewInit(), 100);
+                });
+            });
+        } else {
+            this._map(this.todoMap);
+        }
     }
 
-    titleEdit() {console.log(this);
-        this.editTitle = true;
-        this.focusElement(this.title, 'input');
+    ngAfterViewInit() {
+        if (this.todoMap.isEditingTitle) {
+            this.focusElement(this.title, 'input');
+        }
+
+        if (this.todoMap.isEditingDescription) {
+            this.focusElement(this.description, 'textarea');
+        }
     }
 
-    titleBlur() {console.log('huhu');
-        this.editTitle = false;
-        this.set('title');
+    ngOnDestroy() {
+        if (this.todoStreamSubscription) {
+            this.todoStreamSubscription.unsubscribe();
+        }
+    }
+
+    ngOnChanges() {
+        this.ngAfterViewInit();
+    }
+
+    _map(todoMap: TodoMap) {
+        this.todoModel = {
+            title: todoMap.data.title,
+            description: todoMap.data.description,
+            isEditingTitle: todoMap.isEditingTitle,
+            isEditingDescription: todoMap.isEditingDescription
+        };
+    }
+
+    titleEdit(event) {
+        if (this.todoModel.isEditingTitle) {
+            return;
+        }
+        this.dispatch( x => x.set('isEditingTitle', true));
+    }
+
+    titleBlur(event) {
+        this.dispatch( x => x.set('isEditingTitle', false).setIn(['data', 'title'], event.target.value));
     }
 
     descriptionEdit() {
-        this.editDescription = true;
-        this.focusElement(this.description, 'textarea');
-    }
-
-    descriptionBlur() {
-        this.editDescription = false;
-        this.set('description');
-    }
-
-    set(key) {
-        if (this.todoModel[key] !== this.todoMap.get(key) && this.todoModel.title) {
-            this.todoChanged.emit(this.todoMap.set(key, this.todoModel[key]) as wu.model.Todo);
+        if (this.todoModel.isEditingDescription) {
+            return;
         }
+        this.dispatch( x => x.set('isEditingDescription', true));
+    }
+
+    descriptionBlur(event) {
+        this.dispatch( x => x.set('isEditingDescription', false).setIn(['data', 'description'], event.target.value));
+    }
+
+    dispatch(func: (todoMap: TodoMap) => TodoMap) {
+        this.todoMap = func(this.todoMap);
+
+        this.todoChange.emit(this.todoMap);
     }
 
     focusElement(elementRef: ElementRef, query: string) {
         this.ngZone.runOutsideAngular(() =>
             setTimeout(
-                () => elementRef.nativeElement.querySelector(query).focus(), 10
+                () => elementRef.nativeElement.querySelector(query).focus(), 100
             )
         );
     }

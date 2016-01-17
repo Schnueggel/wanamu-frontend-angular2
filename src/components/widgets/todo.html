@@ -1,10 +1,10 @@
 <div class="toolbar"></div>
 <h2 class="title" (click)="titleEdit($event)" #title>
-    <span *ngIf="!editTitle" class="text" [class.empty]="!todoModel.title">{{todoModel.title || 'Enter your Title...'}}</span>
-    <input *ngIf="editTitle" type="text" [(ngModel)]="todoModel.title" (blur)="titleBlur($event)" class="form-control" placeholder="Title">
+    <span *ngIf="!todoModel.isEditingTitle" class="text" [class.empty]="!todoModel.title">{{todoModel.title || 'Enter your Title...'}}</span>
+    <input *ngIf="todoModel.isEditingTitle" type="text" [(ngModel)]="todoModel.title" (blur)="titleBlur($event)" class="form-control" placeholder="Title">
 </h2>
 <div class="description" (click)="descriptionEdit($event)" #description>
-    <span *ngIf="!editDescription" class="text" [class.empty]="!todoModel.description">{{todoModel.description || 'Enter your Description...'}}</span>
-    <textarea rows="3" *ngIf="editDescription" (blur)="descriptionBlur($event)" class="form-control" [(ngModel)]="todoModel.description" placeholder="Enter Description">{{todoModel.description}}</textarea>
+    <span *ngIf="!todoModel.isEditingDescription" class="text" [class.empty]="!todoModel.description">{{todoModel.description || 'Enter your Description...'}}</span>
+    <textarea rows="3" *ngIf="todoModel.isEditingDescription" (blur)="descriptionBlur($event)" class="form-control" [(ngModel)]="todoModel.description" placeholder="Enter Description">{{todoModel.description}}</textarea>
 </div>
 <div class="colorbar"></div>

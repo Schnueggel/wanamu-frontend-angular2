@@ -16,11 +16,11 @@
     <!-- TODO perhaps use jspm to resolve node modules. -->
     <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
-
     <script>
         System.config({
             map: {
-                immutable: 'node_modules/immutable/dist/immutable.min.js'
+                immutable: 'node_modules/immutable/dist/immutable.min.js',
+                lodash: 'node_modules/lodash/index.js'
             },
             packages: {
                 app: {

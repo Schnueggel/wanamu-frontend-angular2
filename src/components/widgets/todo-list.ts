@@ -12,15 +12,15 @@ import {ChangeDetectionStrategy} from 'angular2/core';
 export class TodoListComponent {
 
     @Input() todos: Array<wu.model.Todo>;
-    @Output() todoChanged: EventEmitter<wu.model.Todo> = new EventEmitter<wu.model.Todo>();
+    @Output() todoChange: EventEmitter<wu.model.Todo> = new EventEmitter<wu.model.Todo>();
     @Output() addTodo: EventEmitter<void> = new EventEmitter<void>();
 
     constructor() {
 
     }
 
-    onTodoChanged(model: wu.model.Todo) {
-        this.todoChanged.emit(model);
+    onTodoChange(model: wu.model.Todo) {
+        this.todoChange.emit(model);
     }
 
     ngOnInit() {

@@ -1,2 +1,2 @@
 <h1>Todo List</h1>
-<todo-list [todos]="todoList" (todoChanged)="onTodoChanged($event)" (addTodo)="onAddTodo($event)"></todo-list>
+<todo-list [todos]="todoListStore.currentTodosStream | async | toObservable:'data._id'" (todoChange)="onTodoChange($event)" (addTodo)="onAddTodo($event)"></todo-list>
